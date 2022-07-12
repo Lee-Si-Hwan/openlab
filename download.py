@@ -13,28 +13,18 @@
 
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
 
 def model (n):
     kn = KNeighborsClassifier(n_neighbors=n)
     fruits = np.load('my_data.npy')
     labels = np.load('my_label.npy')
-    fruits_2d = fruits.reshape(-1, 100*100)
+    fruits_2d = fruits.reshape(-1, 50*50)
     print(fruits_2d.shape)
-    temp = list()
-    for i in range(100):
-        X_train, X_test, y_train, y_test = train_test_split(fruits_2d, labels, test_size=0.2)
-        # print(fruits_2d.shape)
-        kn.fit(X_train, y_train)
-        # print("n=",n,kn.score(X_test, y_test))
-        temp.append(kn.score(X_test, y_test))
-    # print(kn.predict(fruits_2d))
-    # print(labels)
-    print(n)
-    print(np.mean(temp))
+    
+    kn.fit(fruits_2d, labels)
+    return kn
 
-for i in range(1,10):
-    model(i)
+
 
 '''
 0.6009523809523809
