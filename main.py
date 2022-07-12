@@ -1,5 +1,17 @@
+from ast import Pass
 import cv2
 import prepareingData
+import sys
+
+def mouse_click(event, x, y, flags, param):
+    global img
+    
+    if event == cv2.EVENT_FLAG_LBUTTON:    
+        cv2.circle(img, (x, y), 5, (0, 0, 255), 2)
+        cv2.imshow("blank", img)
+    elif event == cv2.EVENT_FLAG_RBUTTON:   
+        img = np.full((800, 800, 3), 255, dtype=np.uint8) 
+        cv2.imshow("blank", img)
 
 capture = cv2.VideoCapture(0)
 capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -16,7 +28,7 @@ while True:
     if key == ord('c'):
         print("C")
         img_captured = cv2.imwrite('img_captured.png', frame)
-        print("Done")
+        print("올바르게 분류하였나요?(y/n)")
         
     if key == ord('q'):
         print("q")
@@ -26,6 +38,16 @@ while True:
         print("S")
         data = prepareingData.get_histogram('./img_captured.png')
         print("Done")
+    
+    if key == ord('y'):
+        print("올바르게 분류하였군요!")
+        print("학습에 반영되었습니다!")
+        pass 
+
+    if key == ord('n'):
+        print("올바르지 않군요!")
+        print("메뉴얼을 보고 알맞은 색 버튼을 눌러주세요!")
+        pass
         
 capture.release()
 cv2.destroyAllWindows()
