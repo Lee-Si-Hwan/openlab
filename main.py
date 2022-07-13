@@ -5,7 +5,7 @@ import model
 import numpy as np
 import os
 
-img_size = 50
+img_size = 100
 color_lb = 0
 capture = cv2.VideoCapture(0)
 capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -32,17 +32,18 @@ while True:
     
     if key == ord('b'):
         print("B")
-        kn = model.model(7, img_size)
-        print(kn.labels_)
+        kn = model.model(3, img_size)
 
         img = cv2.imread("img_captured.png")
         img  = cv2.resize(img, dsize=(img_size, img_size))
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        h, _, _ = cv2.split(hsv)
-        data = np.array([h])
-        data_2d = data.reshape(-1, img_size*img_size)
-        print(kn.predict(data_2d))
-        color_lb = int(kn.predict(data_2d))
+        hist = cv2.calcHist([hsv], [0], None, [180], [0, 180])
+        hist = np.ravel(hist, order='C')#1차원으로 축소
+        hist = hist[1:] #첫번째 값은 h가 0이므로 제거
+        hist = hist / sum(hist)
+        data = np.array([hist])
+        print(kn.predict(data))
+        color_lb = int(kn.predict(data))
         print("올바르게 분류되었나요?(y/n)")
         
     if key == ord('s'):

@@ -1,13 +1,14 @@
 from PIL import Image
 import os, glob, cv2, numpy as np
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 #groups_folder_path = 'C:/Users/user/Desktop/colorgroup'
 categories = ["red","blue"]
 nb_classes = len(categories) #카테고리갯수: 6개
 
-image_w = 50 #이미지의 크기를 모두 통일해준다
-image_h = 50
+image_w = 100 #이미지의 크기를 모두 통일해준다
+image_h = 100
 
 def make_dataset(data, label):
     np.save('my_data.npy', data) # numpy.ndarray 저장. @파일명, @값
@@ -26,13 +27,21 @@ def make_histogram():
             img = cv2.imread(cat+"/"+i)
             img  = cv2.resize(img, dsize=(image_w, image_h))
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            h, _, _ = cv2.split(hsv)
-            data.append(list(h))
-            print(h.shape)
+
+            hist = cv2.calcHist([hsv], [0], None, [180], [0, 180])
+            hist = np.ravel(hist, order='C')#1차원으로 축소
+            hist = hist[1:] #첫번째 값은 h가 0이므로 제거
+            hist = hist / sum(hist)
+            data.append(list(hist))
+
             label = np.append(label, idx)
-        
+        print(idx)
     data = np.array(data)
     make_dataset(data , label)
+    print(data.shape)
+    print(label.shape)
+    
+make_histogram()
 # print(data.shape)
 # print(label.shape)
 # print(data[:3])
