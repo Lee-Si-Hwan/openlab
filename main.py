@@ -4,6 +4,10 @@ from npy_save_hsv import make_histogram
 import model
 import numpy as np
 import os
+import serial
+import time
+
+arduino = serial.Serial('com3',9600)
 
 img_size = 100
 color_lb = 0
@@ -27,8 +31,17 @@ while True:
     if key == ord('c'):
         print("C")
         img_captured = cv2.imwrite('img_captured.png', frame)
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
         print("사진이 저장되었습니다.")
         print("초콜릿을 분류 기계에 올려두고 분류 버튼 B를 누르세요")
+        
     
     if key == ord('b'):
         print("B")
@@ -44,14 +57,32 @@ while True:
         data = np.array([hist])
         print(kn.predict(data))
         color_lb = int(kn.predict(data))
+        if color_lb == 0:
+            var = '-1'
+            arduino.write(var.encode('utf-8'))
+        else:
+            var = '1'
+            arduino.write(var.encode('utf-8'))
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
         print("올바르게 분류되었나요?(y/n)")
         
-    if key == ord('s'):
-        print("S")
-        data = prepareingData.get_histogram('./img_captured.png')
-        print("Done")
     
     if key == ord('y'):
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
         print("올바르게 분류하였군요!")
         path_source = './img_captured.png'
         
@@ -63,10 +94,17 @@ while True:
             clb = len(os.listdir("./blue"))+1
         os.replace(path_source , path_dest + f"{clb}.png")
         make_histogram()
-        print("학습에 반영되었습니다!")
         pass 
 
     if key == ord('n'):
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
+        print()
         print("올바르지 않군요!")
         path_source = './img_captured.png'
         
@@ -80,6 +118,10 @@ while True:
         make_histogram()
         print("학습에 반영되었습니다!")
         pass
+    
+    if key == ord('t'):
+        print("학습에 반영되었습니다!")
+        model.test_model(3)
         
 capture.release()
 cv2.destroyAllWindows()

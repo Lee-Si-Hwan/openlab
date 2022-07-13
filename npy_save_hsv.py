@@ -16,7 +16,7 @@ def make_dataset(data, label):
 
     np.save('my_label.npy', label) # numpy.ndarray 저장. @파일명, @값
     data2 = np.load('my_label.npy')
-    print("uploaded")
+    print("학습에 반영되었습니다!")
 
 def make_histogram():
     data = list()
@@ -35,11 +35,10 @@ def make_histogram():
             data.append(list(hist))
 
             label = np.append(label, idx)
-        print(idx)
+        
     data = np.array(data)
     make_dataset(data , label)
-    print(data.shape)
-    print(label.shape)
+    
     
 make_histogram()
 # print(data.shape)
