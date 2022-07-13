@@ -6,7 +6,7 @@ time.sleep(1)
 
 print("입력한 위치로 회전")
 
-def process_moter
+def process_moter ():
     var = input()
     var = var.encode('utf-8')
     arduino.write(var)
