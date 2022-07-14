@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 #groups_folder_path = 'C:/Users/user/Desktop/colorgroup'
-categories = ["red","blue"]
+categories = ["red","blue", "green"]
 nb_classes = len(categories) #카테고리갯수: 6개
 
 image_w = 100 #이미지의 크기를 모두 통일해준다
@@ -37,6 +37,8 @@ def make_histogram():
             label = np.append(label, idx)
         
     data = np.array(data)
+    # print(data)
+    # print(label)
     make_dataset(data , label)
     
     

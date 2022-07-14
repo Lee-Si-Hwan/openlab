@@ -7,13 +7,13 @@ import os
 import serial
 import time
 
-arduino = serial.Serial('com3',9600)
+arduino = serial.Serial('com4',9600)
 
 img_size = 100
 color_lb = 0
 capture = cv2.VideoCapture(0)
-capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+capture.set(cv2.CAP_PROP_FRAME_WIDTH, 600)
+capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
 
 while True:
     ret, frame = capture.read()
@@ -29,7 +29,6 @@ while True:
         break
 
     if key == ord('c'):
-        print("C")
         img_captured = cv2.imwrite('img_captured.png', frame)
         print()
         print()
@@ -44,8 +43,7 @@ while True:
         
     
     if key == ord('b'):
-        print("B")
-        kn = model.model(3, img_size)
+        kn = model.model(4, img_size)
 
         img = cv2.imread("img_captured.png")
         img  = cv2.resize(img, dsize=(img_size, img_size))
@@ -58,10 +56,16 @@ while True:
         print(kn.predict(data))
         color_lb = int(kn.predict(data))
         if color_lb == 0:
-            var = '-1'
+            print("빨간색입니다.")
+            var = '1'
+            arduino.write(var.encode('utf-8'))
+        elif color_lb == 1:
+            print("파란색입니다.")
+            var = '2'
             arduino.write(var.encode('utf-8'))
         else:
-            var = '1'
+            print("초록색입니다.")
+            var = '3'
             arduino.write(var.encode('utf-8'))
         print()
         print()
@@ -72,6 +76,7 @@ while True:
         print()
         print()
         print("올바르게 분류되었나요?(y/n)")
+        print("올바르게 분류했으면 Y를 누르고 아니면 알맞는 색의 버튼을 누르세요")
         
     
     if key == ord('y'):
@@ -89,39 +94,45 @@ while True:
         if color_lb == 0:
             path_dest = './red/'
             clb = len(os.listdir("./red"))+1
-        else:
+        elif color_lb == 1:
             path_dest = './blue/'
             clb = len(os.listdir("./blue"))+1
+        else:
+            path_dest = './green/'
+            clb = len(os.listdir("./green"))+1
         os.replace(path_source , path_dest + f"{clb}.png")
         make_histogram()
-        pass 
-
-    if key == ord('n'):
-        print()
-        print()
-        print()
-        print()
-        print()
-        print()
-        print()
-        print()
-        print("올바르지 않군요!")
-        path_source = './img_captured.png'
         
-        if color_lb == 0:
-            path_dest = './blue/'
-            clb = len(os.listdir("./blue"))+1
-        else:
-            path_dest = './red/'
-            clb = len(os.listdir("./red"))+1
+    
+    if key == ord('i'):
+        path_source = './img_captured.png'
+        path_dest = './red/'
+        clb = len(os.listdir("./red"))+1
+        os.replace(path_source , path_dest + f"{clb}.png")
+        make_histogram()
+        print("학습에 반영되었습니다!")
+        pass
+    if key == ord('o'):
+        path_source = './img_captured.png'
+        path_dest = './blue/'
+        clb = len(os.listdir("./blue"))+1
+        os.replace(path_source , path_dest + f"{clb}.png")
+        make_histogram()
+        print("학습에 반영되었습니다!")
+        pass
+    if key == ord('p'):
+        path_source = './img_captured.png'
+        path_dest = './green/'
+        clb = len(os.listdir("./green"))+1
         os.replace(path_source , path_dest + f"{clb}.png")
         make_histogram()
         print("학습에 반영되었습니다!")
         pass
     
     if key == ord('t'):
-        print("학습에 반영되었습니다!")
-        model.test_model(3)
+        print("\n\n\n\n")
+        print("잠시만 기다려 주세요...\n\n")
+        model.test_model(4)
         
 capture.release()
 cv2.destroyAllWindows()

@@ -18,8 +18,8 @@ def test_model(n):
     fruits = np.load('my_data.npy')
     labels = np.load('my_label.npy')
     avg_list = list()
-    for i in range(100):
-        train_data, test_data, train_label, test_label = train_test_split(fruits, labels, test_size=0.25)
+    for i in range(1000):
+        train_data, test_data, train_label, test_label = train_test_split(fruits, labels,test_size=0.25)
         kn.fit(train_data, train_label)
         avg_list.append(kn.score(test_data, test_label))
 
