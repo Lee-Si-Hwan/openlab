@@ -22,8 +22,10 @@ def test_model(n):
         train_data, test_data, train_label, test_label = train_test_split(fruits, labels,test_size=0.25)
         kn.fit(train_data, train_label)
         avg_list.append(kn.score(test_data, test_label))
-
+    print()
     print("모델의 성능은 ", round(np.mean(avg_list)*100, 2), "점 입니다.")
+    print()
+    print("===================================================")
 # def model (n, img_size):
 #     # kn = KNeighborsClassifier(n_neighbors=n)
 #     sc = SGDClassifier(loss='log', max_iter=5, random_state=42)

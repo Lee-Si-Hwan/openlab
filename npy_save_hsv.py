@@ -17,6 +17,9 @@ def make_dataset(data, label):
     np.save('my_label.npy', label) # numpy.ndarray 저장. @파일명, @값
     data2 = np.load('my_label.npy')
     print("학습에 반영되었습니다!")
+    print()
+    print("===================================================")
+    print()
 
 def make_histogram():
     data = list()
